@@ -1,0 +1,140 @@
+﻿@model IEnumerable<MultiLayerApp.Models.Product>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<div class="row">
+    <div class="col-6">
+        <h2 class="text-primary">Product List </h2>
+    </div>
+    <div class="col-6 text-right">
+        <a class="btn btn-primary" asp-action="Upsert"><i class="fas fa-plus"></i> &nbsp; Create New Product</a>
+    </div>
+</div>
+
+<div class="main">
+    <div class="filter m-2">
+        <form asp-action="Index" method="get">
+            <div class="price">
+                <label class="form-label">Price</label>
+                <div class="price-flexbox">
+                    <div class="mx-1">
+                        <input type="number"
+                               name="priceFrom"
+                               value=""
+                               class="form-control"
+                               id="from"
+                               placeholder="From" />
+                    </div>
+                    -
+                    <div class="mx-1">
+                        <input type="number"
+                               name="priceTo"
+                               value=""
+                               class="form-control"
+                               id="to"
+                               placeholder="To" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="name mt-2">
+                <label for="phoneName" class="form-label">Name</label>
+                <input type="text"
+                       name="searchString"
+                       value=""
+                       class="form-control"
+                       id="phoneName"
+                       placeholder="Phone name" />
+            </div>
+
+            <div class="manufacturer mt-2">
+                <label for="manufacturer" class="form-label">Manufacturer</label>
+                <select class="form-select" id="manufacturer" name="manufacturer" style="color: gray;">
+                    <option value="" selected>Choose an option</option>
+                    <option value="samsung">Samsung</option>
+                    <option value="apple">Apple</option>
+                    <option value="xiaomi">Xiaomi</option>
+                </select>
+            </div>
+            <div class="search mt-3">
+                <button type="submit" class="btn btn-primary">
+                    Search
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         width="16"
+                         height="16"
+                         fill="currentColor"
+                         class="bi bi-search"
+                         viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                              d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z" />
+                        <path fill-rule="evenodd"
+                              d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z" />
+                    </svg>
+                </button>
+                <a asp-action="Index" class="btn btn-link">Remove Filter </a>
+            </div>
+        </form>
+    </div>
+
+    <div class="container phone-grid">
+        <form method="post">
+            <div class="row">
+                @if (Model.Any())
+                {
+                    @foreach (var item in Model)
+                    {
+                        <!-- Phone -->
+                        <div class="col-sm-4 p-2 phone-grid-item">
+                            <div class="phone-grid-item-content">
+                                <div class="card">
+                                    @*@if (item.Photos != null)
+                                    {
+                                        <a asp-controller="Home" asp-action="PhoneDetails" asp-route-id="@item.Id" class="card-img-top phone-img" style="background-image: url(@Html.DisplayFor(m => item.Photos));"></a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-controller="Home" asp-action="PhoneDetails" asp-route-id="@item.Id" class="card-img-top phone-img" style="background-image: url(/img/unnamed.png);"></a>
+                                    }*@
+                                    <div class="card-body">
+                                        <h5 class="card-title"><a asp-controller="Home" asp-action="PhoneDetails" asp-route-id="@item.Id">@item.Name</a></h5>
+                                        <div class="price">
+                                            <p>@Html.DisplayFor(m => item.Price) ₾</p>
+                                            <div>
+                                                <a asp-action="Upsert" asp-route-id="@item.Id" class="btn btn-primary btn-sm">
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                         width="16"
+                                                         height="16"
+                                                         fill="currentColor"
+                                                         class="bi bi-pencil-fill"
+                                                         viewBox="0 0 16 16">
+                                                        <path fill-rule="evenodd"
+                                                              d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z" />
+                                                    </svg>
+                                                </a>
+
+                                                <button asp-action="Delete" asp-route-id="@item.Id" onclick="return confirm('Are you sure you want to delete?')" class="btn btn-danger btn-sm">
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                         width="16"
+                                                         height="16"
+                                                         fill="currentColor"
+                                                         class="bi bi-trash-fill"
+                                                         viewBox="0 0 16 16">
+                                                        <path fill-rule="evenodd"
+                                                              d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Phone -->
+                    }
+                }
+            </div>
+        </form>
+    </div>
+</div>
