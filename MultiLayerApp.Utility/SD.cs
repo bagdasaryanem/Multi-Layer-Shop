@@ -6,5 +6,8 @@ namespace MultiLayerApp.Utility
 {
     public static class SD
     {
+        public const string RoleCustomer = "Customer";
+        public const string RoleAdmin = "Admin";
+        public const string RoleEmployee = "Employee";
     }
 }

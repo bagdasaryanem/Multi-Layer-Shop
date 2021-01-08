@@ -110,8 +110,7 @@ namespace MultiLayerApp.Areas.Admin.Controllers
             }
             else
             {
-                IEnumerable<Category> catList = _unitOfWork.Category.GetAll();
-                productViewModel.CategoryList = catList.Select(i => new SelectListItem
+                productViewModel.CategoryList = _unitOfWork.Category.GetAll().Select(i => new SelectListItem
                 {
                     Text = i.Name,
                     Value = i.Id.ToString()
