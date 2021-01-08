@@ -63,18 +63,19 @@ namespace MultiLayerApp.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                string webRootPath = _hostEnvironment.WebRootPath;
+                var webRootPath = _hostEnvironment.WebRootPath;
                 var files = HttpContext.Request.Form.Files;
                 if (files.Count > 0)
                 {
-                    string fileName = Guid.NewGuid().ToString();
+                    var fileName = Guid.NewGuid().ToString();
                     var uploads = Path.Combine(webRootPath, @"images\products");
                     var extenstion = Path.GetExtension(files[0].FileName);
 
-                    if (productViewModel.Product.Photos != null)
+                    var objFromDb = _unitOfWork.Product.Get(productViewModel.Product.Id);
+                    if (objFromDb.Photos != null)
                     {
                         //this is an edit and we need to remove old image
-                        var imagePath = Path.Combine(webRootPath, productViewModel.Product.Photos.TrimStart('\\'));
+                        var imagePath = Path.Combine(webRootPath, objFromDb.Photos.TrimStart('\\'));
                         if (System.IO.File.Exists(imagePath))
                         {
                             System.IO.File.Delete(imagePath);
@@ -91,7 +92,7 @@ namespace MultiLayerApp.Areas.Admin.Controllers
                     //update when they do not change the image
                     if (productViewModel.Product.Id != 0)
                     {
-                        Product objFromDb = _unitOfWork.Product.Get(productViewModel.Product.Id);
+                        var objFromDb = _unitOfWork.Product.Get(productViewModel.Product.Id);
                         productViewModel.Product.Photos = objFromDb.Photos;
                     }
                 }
@@ -105,6 +106,7 @@ namespace MultiLayerApp.Areas.Admin.Controllers
                 {
                     _unitOfWork.Product.Update(productViewModel.Product);
                 }
+
                 _unitOfWork.Save();
                 return RedirectToAction(nameof(Index));
             }
