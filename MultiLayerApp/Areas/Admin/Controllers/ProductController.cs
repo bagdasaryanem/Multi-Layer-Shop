@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -10,10 +11,12 @@ using MultiLayerApp.DataAccess.Repository;
 using MultiLayerApp.DataAccess.Repository.IRepository;
 using MultiLayerApp.Models;
 using MultiLayerApp.Models.ViewModels;
+using MultiLayerApp.Utility;
 
 namespace MultiLayerApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = SD.RoleAdmin)]
     public class ProductController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

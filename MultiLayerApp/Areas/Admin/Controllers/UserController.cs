@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MultiLayerApp.DataAccess.Data;
+using MultiLayerApp.Utility;
 
 namespace MultiLayerApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = SD.RoleAdmin + "," + SD.RoleEmployee)]
     public class UserController : Controller
     {
         private readonly ApplicationDbContext _db;

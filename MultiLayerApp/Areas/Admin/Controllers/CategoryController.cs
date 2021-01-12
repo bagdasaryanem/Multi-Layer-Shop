@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MultiLayerApp.DataAccess.Repository;
 using MultiLayerApp.DataAccess.Repository.IRepository;
 using MultiLayerApp.Models;
+using MultiLayerApp.Utility;
 
 namespace MultiLayerApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = SD.RoleAdmin)]
     public class CategoryController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
