@@ -6,11 +6,14 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using MultiLayerApp.DataAccess.Repository.IRepository;
+using MultiLayerApp.Utility;
 
 namespace MultiLayerApp.Areas.Identity.Pages.Account
 {
@@ -20,11 +23,14 @@ namespace MultiLayerApp.Areas.Identity.Pages.Account
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly IUnitOfWork _unitOfWork;
 
         public LoginModel(SignInManager<IdentityUser> signInManager, 
             ILogger<LoginModel> logger,
-            UserManager<IdentityUser> userManager)
+            UserManager<IdentityUser> userManager,
+            IUnitOfWork unitOfWork)
         {
+            _unitOfWork = unitOfWork;
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
@@ -82,6 +88,11 @@ namespace MultiLayerApp.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    var user = _unitOfWork.AppUser.GetFirstOrDefault(u => u.Email == Input.Email);
+
+                    int count = _unitOfWork.ShoppingCart.GetAll(u => u.AppUserId == user.Id).Count();
+                    HttpContext.Session.SetInt32(SD.ShoppingCartSession, count);
+
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }

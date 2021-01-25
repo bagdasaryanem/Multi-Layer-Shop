@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MultiLayerApp.DataAccess.Data;
+using MultiLayerApp.DataAccess.Initializer;
 using MultiLayerApp.DataAccess.Repository;
 using MultiLayerApp.DataAccess.Repository.IRepository;
 using MultiLayerApp.Utility;
@@ -32,6 +34,7 @@ namespace MultiLayerApp
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddSingleton<IEmailSender, EmailSender>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IDbInitializer, DbInitializer>();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddRazorPages();
             services.ConfigureApplicationCookie(options =>
@@ -40,10 +43,16 @@ namespace MultiLayerApp
                 options.LogoutPath = $"/Identity/Account/Logout";
                 options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
             });
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IDbInitializer dbInitializer)
         {
             if (env.IsDevelopment())
             {
@@ -60,10 +69,10 @@ namespace MultiLayerApp
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseSession();
             app.UseAuthentication();
             app.UseAuthorization();
-
+            dbInitializer.Initialize();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

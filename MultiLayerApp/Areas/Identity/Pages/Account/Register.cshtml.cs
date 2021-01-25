@@ -116,22 +116,6 @@ namespace MultiLayerApp.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    if (!await _roleManager.RoleExistsAsync(SD.RoleAdmin))
-                    {
-                        await _roleManager.CreateAsync(new IdentityRole(SD.RoleAdmin));
-                    }
-
-                    if (!await _roleManager.RoleExistsAsync(SD.RoleCustomer))
-                    {
-                        await _roleManager.CreateAsync(new IdentityRole(SD.RoleCustomer));
-                    }
-
-                    if (!await _roleManager.RoleExistsAsync(SD.RoleEmployee))
-                    {
-                        await _roleManager.CreateAsync(new IdentityRole(SD.RoleEmployee));
-                    }
-
-
                     if (user.Role == null)
                     {
                         await _userManager.AddToRoleAsync(user, SD.RoleCustomer);
@@ -175,6 +159,15 @@ namespace MultiLayerApp.Areas.Identity.Pages.Account
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
+
+            Input = new InputModel()
+            {
+                RoleList = _roleManager.Roles.Where(u => u.Name != SD.RoleCustomer).Select(x => x.Name).Select(i => new SelectListItem
+                {
+                    Text = i,
+                    Value = i
+                })
+            };
 
             // If we got this far, something failed, redisplay form
             return Page();

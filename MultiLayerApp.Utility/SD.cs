@@ -9,5 +9,8 @@ namespace MultiLayerApp.Utility
         public const string RoleCustomer = "Customer";
         public const string RoleAdmin = "Admin";
         public const string RoleEmployee = "Employee";
+
+
+        public const string ShoppingCartSession = "Shoping Cart Session";
     }
 }
