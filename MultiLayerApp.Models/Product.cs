@@ -12,8 +12,6 @@ namespace MultiLayerApp.Models
         [Required]
         public string Name { get; set; }
         [Required]
-        public string Manufacturer { get; set; }
-        [Required]
         public string Size { get; set; }
         [Required]
         public string Weight { get; set; }

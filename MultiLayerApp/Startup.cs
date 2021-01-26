@@ -37,6 +37,7 @@ namespace MultiLayerApp
             services.AddScoped<IDbInitializer, DbInitializer>();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddRazorPages();
+            services.AddCloudscribePagination();
             services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = $"/Identity/Account/Login";

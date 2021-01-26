@@ -33,7 +33,7 @@ namespace MultiLayerApp.DataAccess.Initializer
                     _db.Database.Migrate();
                 }
             }
-            catch (Exception exception)
+            catch (Exception e)
             {
 
             }

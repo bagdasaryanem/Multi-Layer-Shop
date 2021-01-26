@@ -26,7 +26,7 @@ namespace MultiLayerApp.DataAccess.Repository
 
                 objFromDb.Name = product.Name;
                 objFromDb.DisplaySize = product.DisplaySize;
-                objFromDb.Manufacturer = product.Manufacturer;
+                //objFromDb.Manufacturer = product.Manufacturer;
                 objFromDb.Memory = product.Memory;
                 objFromDb.OperatingSystem = product.OperatingSystem;
                 objFromDb.Price = product.Price;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
+using cloudscribe.Pagination.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -27,13 +28,13 @@ namespace MultiLayerApp.Areas.Customer.Controllers
             _logger = logger;
             _unitOfWork = unitOfWork;
         }
-        
-        public IActionResult Index(string searchString, int? category, int? priceFrom, int? priceTo)
+
+        public IActionResult Index(string searchString, int? category, int? priceFrom, int? priceTo, int pageNumber = 1, int pageSize = 8)
         {
             IEnumerable<Product> productList = _unitOfWork.Product.GetAll(includeProperties: "Category");
             if (!String.IsNullOrEmpty(searchString))
                 productList = productList.Where(x => x.Name.Contains(searchString));
-            
+
             var categoryList = _unitOfWork.Category.GetAll().Select(i => new SelectListItem
             {
                 Text = i.Name,
@@ -60,7 +61,20 @@ namespace MultiLayerApp.Areas.Customer.Controllers
 
                 HttpContext.Session.SetInt32(SD.ShoppingCartSession, count);
             }
-            return View(productList);
+
+            var excludeRecords = (pageSize * pageNumber) - pageSize;
+            var phoneCount = productList.Count();
+            productList = productList.Skip(excludeRecords)
+                                     .Take(pageSize);
+
+            var result = new PagedResult<Product>
+            {
+                Data = productList.ToList(),
+                TotalItems = phoneCount,
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
+            return View(result);
         }
 
         public IActionResult Privacy()

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using cloudscribe.Pagination.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -28,10 +29,23 @@ namespace MultiLayerApp.Areas.Admin.Controllers
             _hostEnvironment = hostEnvironment;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int pageNumber = 1, int pageSize = 8)
         {
             var allObj = _unitOfWork.Product.GetAll(includeProperties: "Category");
-            return View(allObj);
+
+            var excludeRecords = (pageSize * pageNumber) - pageSize;
+            var phoneCount = allObj.Count();
+            allObj = allObj.Skip(excludeRecords)
+                .Take(pageSize);
+
+            var result1 = new PagedResult<Product>
+            {
+                Data = allObj.ToList(),
+                TotalItems = phoneCount,
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
+            return View(result1);
         }
 
         public IActionResult Upsert(int? id)
@@ -74,11 +88,11 @@ namespace MultiLayerApp.Areas.Admin.Controllers
                     var uploads = Path.Combine(webRootPath, @"images\products");
                     var extenstion = Path.GetExtension(files[0].FileName);
 
-                    var objFromDb = _unitOfWork.Product.Get(productViewModel.Product.Id);
-                    if (objFromDb.Photos != null)
+                    //var objFromDb = _unitOfWork.Product.Get(productViewModel.Product.Id);
+                    if (productViewModel.Product.Photos != null)
                     {
                         //this is an edit and we need to remove old image
-                        var imagePath = Path.Combine(webRootPath, objFromDb.Photos.TrimStart('\\'));
+                        var imagePath = Path.Combine(webRootPath, productViewModel.Product.Photos.TrimStart('\\'));
                         if (System.IO.File.Exists(imagePath))
                         {
                             System.IO.File.Delete(imagePath);

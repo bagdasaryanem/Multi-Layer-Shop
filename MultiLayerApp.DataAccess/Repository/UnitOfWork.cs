@@ -24,12 +24,6 @@ namespace MultiLayerApp.DataAccess.Repository
         public IShoppingCartRepository ShoppingCart { get; private set; }
         public IOrderHeaderRepository OrderHeader { get; private set; }
 
-
-        public void Dispose()
-        {
-            _db.Dispose();
-        }
-
         public void Save()
         {
             _db.SaveChanges();
