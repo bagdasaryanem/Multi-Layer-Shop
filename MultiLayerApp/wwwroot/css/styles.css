@@ -129,7 +129,7 @@ body {
 
 .phone-grid-item-content .phone-img {
     cursor: pointer;
-    max-height: 180px;
+    height: 185px;
     max-width: 80%;
     margin-top: 20px;
     background-position: center;
@@ -238,6 +238,7 @@ body {
     border-radius: 8px;
     border: 2px solid #093251;
     display: flex;
+    flex-direction: column;
     justify-content: space-around;
     align-items: center;
 }
@@ -271,6 +272,7 @@ body {
 
         .shopping-cart-table-row .left img {
             width: 100px;
+            margin-right: 20px;
         }
 
     .shopping-cart-table-row .right {
@@ -285,6 +287,7 @@ body {
 
         .shopping-cart-table-row .right .row-buttons {
             display: flex;
+            align-items: center;
         }
 
 

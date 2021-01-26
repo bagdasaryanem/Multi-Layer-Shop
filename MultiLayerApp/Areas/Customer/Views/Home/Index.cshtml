@@ -1,5 +1,4 @@
-﻿@*@model IEnumerable<MultiLayerApp.Models.Product>*@
-@model cloudscribe.Pagination.Models.PagedResult<Product>
+﻿@model cloudscribe.Pagination.Models.PagedResult<Product>
 
     @{
         Layout = "~/Views/Shared/_Layout.cshtml";
@@ -15,6 +14,7 @@
                                    name="priceFrom"
                                    value=""
                                    class="form-control"
+                                   min="0"
                                    id="from"
                                    placeholder="From" />
                         </div>
@@ -24,6 +24,7 @@
                                    name="priceTo"
                                    value=""
                                    class="form-control"
+                                   min="0"
                                    id="to"
                                    placeholder="To" />
                         </div>
@@ -43,7 +44,7 @@
                 <div class="manufacturer mt-2">
                     <label for="manufacturer" class="form-label">Manufacturer</label>
                     @Html.DropDownList("category", (IEnumerable
-                                     <SelectListItem>)ViewBag.categoryList, "-Select a Category",
+                                     <SelectListItem>)ViewBag.categoryList, "Select a category",
                                      new { @class = "form-control" })
                 </div>
                 <div class="search mt-3">
@@ -88,7 +89,7 @@
                                     }
 
                                     <div class="card-body">
-                                        <h5 class="card-title">@item.Name</h5>
+                                        <h5 class="card-title"><a asp-controller="Home" asp-action="Details" asp-route-id="@item.Id">@item.Name</a></h5>
                                         <div class="price">
                                             <p>@Html.DisplayFor(m => item.Price)  ₾</p>
                                             <div>

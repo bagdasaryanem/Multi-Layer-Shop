@@ -23,17 +23,7 @@
                         </td>
                     </tr>
 
-                    @*<tr>
-                            <th scope="row">
-                                <label asp-for="Product.Photos" class="form-label">Name</label>
-                            </th>
-                            <td>
-                                <input asp-for="Product.Photos" class="form-control" />
-                                <span asp-validation-for="Product.Photos" class="text-danger"></span>
-                            </td>
-                        </tr>*@
-
-                    <tr>
+                <tr>
                         <th scope="row">
                             Image
                         </th>
@@ -52,16 +42,6 @@
                             <span asp-validation-for="Product.CategoryId" class="text-danger"></span>
                         </td>
                     </tr>
-
-                    @*<tr>
-                        <th scope="row">
-                            <label asp-for="Product.Manufacturer" class="form-label">Manufacturer</label>
-                        </th>
-                        <td>
-                            <input asp-for="Product.Manufacturer" class="form-control" />
-                            <span asp-validation-for="Product.Manufacturer" class="text-danger"></span>
-                        </td>
-                    </tr>*@
 
                     <tr>
                         <th scope="row">
@@ -108,7 +88,7 @@
                             <label asp-for="Product.Memory" class="form-label">Memory</label>
                         </th>
                         <td>
-                            <input asp-for="Product.Memory" class="form-control" />
+                            <input asp-for="Product.Memory" class="form-control" min="0"/>
                             <span asp-validation-for="Product.Memory" class="text-danger"></span>
                         </td>
                     </tr>
@@ -128,7 +108,7 @@
                             <label asp-for="Product.Price" class="form-label">Price</label>
                         </th>
                         <td>
-                            <input asp-for="Product.Price" class="form-control" />
+                            <input asp-for="Product.Price" class="form-control" min="0" />
                             <span asp-validation-for="Product.Price" class="text-danger"></span>
                         </td>
                     </tr>
@@ -164,5 +144,5 @@
 </div>
 
 @*@section Scripts{
-    <partial name="_ValidationScriptsPartial" />
-}*@
+        <partial name="_ValidationScriptsPartial" />
+    }*@
