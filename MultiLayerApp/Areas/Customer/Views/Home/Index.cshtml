@@ -12,7 +12,7 @@
                         <div class="mx-1">
                             <input type="number"
                                    name="priceFrom"
-                                   value=""
+                                   value="@(ViewBag.priceFrom ?? String.Empty)"
                                    class="form-control"
                                    min="0"
                                    id="from"
@@ -22,7 +22,7 @@
                         <div class="mx-1">
                             <input type="number"
                                    name="priceTo"
-                                   value=""
+                                   value="@(ViewBag.priceTo ?? String.Empty)"
                                    class="form-control"
                                    min="0"
                                    id="to"
@@ -35,7 +35,7 @@
                     <label for="phoneName" class="form-label">Name</label>
                     <input type="text"
                            name="searchString"
-                           value=""
+                           value="@(ViewBag.searchString ?? String.Empty)"
                            class="form-control"
                            id="phoneName"
                            placeholder="Phone name" />

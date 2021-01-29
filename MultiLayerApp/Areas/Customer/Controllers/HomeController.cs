@@ -33,7 +33,7 @@ namespace MultiLayerApp.Areas.Customer.Controllers
         {
             IEnumerable<Product> productList = _unitOfWork.Product.GetAll(includeProperties: "Category");
             if (!String.IsNullOrEmpty(searchString))
-                productList = productList.Where(x => x.Name.Contains(searchString));
+                productList = productList.Where(x => x.Name.ToLower().Contains(searchString.ToLower()));
 
             var categoryList = _unitOfWork.Category.GetAll().Select(i => new SelectListItem
             {
@@ -50,6 +50,10 @@ namespace MultiLayerApp.Areas.Customer.Controllers
 
             if (priceTo.HasValue)
                 productList = productList.Where(x => x.Price <= priceTo);
+
+            ViewBag.priceFrom = priceFrom;
+            ViewBag.priceTo = priceTo;
+            ViewBag.searchString = searchString;
 
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
